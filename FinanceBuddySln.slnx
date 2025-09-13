@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="FinanceBuddy/FinanceBuddy.csproj">
+    <Deploy Solution="Debug|*" />
+  </Project>
+  <Project Path="MoneyMentor.ApiOrchestrator/MoneyMentor.ApiOrchestrator.csproj" />
+  <Project Path="MoneyMentor.Shared/MoneyMentor.Shared.csproj" />
+</Solution>
