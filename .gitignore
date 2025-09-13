@@ -230,4 +230,4 @@ Artifacts/
 # except build/, which is used as an MSBuild target.
 !**/packages/build/
 
-MoneyMentor.ApiOrchestrator/appsettings.Development.json
+**/appsettings.Development.json
