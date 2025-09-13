@@ -13,9 +13,7 @@ public interface ITranslationService
 public class TranslationService : ITranslationService
 {
     private readonly HttpClient _httpClient;
-    private readonly string _subscriptionKey = "c970362817994bc58e03c0d90e22c7ce";
-    private readonly string _endpoint = "https://api.cognitive.microsofttranslator.com/";
-    private readonly string _region = "southafricanorth";
+    
 
     public TranslationService()
     {
