@@ -1,0 +1,224 @@
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:FinanceBuddy.Converters"
+             x:Class="FinanceBuddy.Pages.ExpensesPage"
+             Title="Expenses"
+             BackgroundColor="{DynamicResource Gray100}">
+    
+    <ContentPage.Resources>
+        <converters:CategoryToColorConverter x:Key="CategoryToColor" />
+        <converters:CategoryToIconConverter x:Key="CategoryToIcon" />
+    </ContentPage.Resources>
+    
+    <ScrollView>
+        <Grid RowDefinitions="Auto,Auto,*" Padding="16" RowSpacing="16">
+            
+            <!-- Modern Header with gradient background -->
+            <Border Grid.Row="0" 
+                    StrokeShape="RoundRectangle 16" 
+                    Stroke="Transparent"
+                    Padding="0"
+                    HeightRequest="120">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="{DynamicResource Primary}" Offset="0.0" />
+                        <GradientStop Color="{DynamicResource Tertiary}" Offset="1.0" />
+                    </LinearGradientBrush>
+                </Border.Background>
+                
+                <Grid Padding="20" ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+                    <Label Grid.Row="0" Grid.Column="0" 
+                           Text="My Expenses" 
+                           FontSize="24" 
+                           FontAttributes="Bold" 
+                           TextColor="White" 
+                           VerticalOptions="Center" />
+                    
+                    <Label Grid.Row="1" Grid.Column="0" 
+                           x:Name="HeaderSummaryLabel"
+                           Text="Track your spending"
+                           FontSize="14" 
+                           TextColor="White" 
+                           Opacity="0.8" />
+                    
+                    <Button Grid.Row="0" Grid.RowSpan="2" Grid.Column="1"
+                            Text="+"
+                            FontSize="28"
+                            FontAttributes="Bold"
+                            TextColor="White"
+                            BackgroundColor="Transparent"
+                            BorderColor="White"
+                            BorderWidth="2"
+                            CornerRadius="25"
+                            HeightRequest="50"
+                            WidthRequest="50"
+                            Clicked="OnShowAddPanel"
+                            VerticalOptions="Center" />
+                </Grid>
+            </Border>
+
+            <!-- Collapsible Add Panel with modern card design -->
+            <Border x:Name="AddPanel" 
+                    Grid.Row="1"
+                    StrokeShape="RoundRectangle 12" 
+                    BackgroundColor="White"
+                    Stroke="{DynamicResource Gray300}"
+                    StrokeThickness="1"
+                    IsVisible="False"
+                    Padding="16">
+                <Border.Shadow>
+                    <Shadow Brush="Black" Offset="0,2" Radius="8" Opacity="0.1" />
+                </Border.Shadow>
+                
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Add New Expense" FontSize="18" FontAttributes="Bold" TextColor="{DynamicResource Gray900}" />
+                    
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12" RowDefinitions="Auto,Auto" RowSpacing="12">
+                        <Border Grid.Row="0" Grid.Column="0" 
+                                BackgroundColor="{DynamicResource Gray100}" 
+                                Stroke="Transparent" 
+                                StrokeShape="RoundRectangle 8" 
+                                Padding="12">
+                            <Entry x:Name="AmountEntry" 
+                                   Keyboard="Numeric" 
+                                   Placeholder="Amount (R)" 
+                                   BackgroundColor="Transparent"
+                                   PlaceholderColor="{DynamicResource Gray500}" />
+                        </Border>
+                        
+                        <Border Grid.Row="0" Grid.Column="1" 
+                                BackgroundColor="{DynamicResource Gray100}" 
+                                Stroke="Transparent" 
+                                StrokeShape="RoundRectangle 8" 
+                                Padding="12">
+                            <Entry x:Name="CategoryEntry" 
+                                   Placeholder="Category (1-5)" 
+                                   Keyboard="Numeric"
+                                   BackgroundColor="Transparent"
+                                   PlaceholderColor="{DynamicResource Gray500}" />
+                        </Border>
+                        
+                        <Border Grid.Row="1" Grid.ColumnSpan="2" 
+                                BackgroundColor="{DynamicResource Gray100}" 
+                                Stroke="Transparent" 
+                                StrokeShape="RoundRectangle 8" 
+                                Padding="12">
+                            <Entry x:Name="NoteEntry" 
+                                   Placeholder="Description (e.g., Bus fare, Groceries)" 
+                                   BackgroundColor="Transparent"
+                                   PlaceholderColor="{DynamicResource Gray500}" />
+                        </Border>
+                    </Grid>
+                    
+                    <!-- Category Legend -->
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Categories:" FontSize="12" FontAttributes="Bold" TextColor="{DynamicResource Gray600}" />
+                        <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto" ColumnSpacing="8" RowSpacing="2">
+                            <Label Grid.Row="0" Grid.Column="0" Text="1 - 🚌 Transport" FontSize="11" TextColor="{DynamicResource Gray600}" />
+                            <Label Grid.Row="0" Grid.Column="1" Text="2 - 🛒 Food" FontSize="11" TextColor="{DynamicResource Gray600}" />
+                            <Label Grid.Row="1" Grid.Column="0" Text="3 - 💊 Health" FontSize="11" TextColor="{DynamicResource Gray600}" />
+                            <Label Grid.Row="1" Grid.Column="1" Text="4 - 🎯 Entertainment" FontSize="11" TextColor="{DynamicResource Gray600}" />
+                            <Label Grid.Row="2" Grid.Column="0" Text="5 - ⚡ Utilities" FontSize="11" TextColor="{DynamicResource Gray600}" />
+                        </Grid>
+                    </VerticalStackLayout>
+                    
+                    <HorizontalStackLayout Spacing="12" HorizontalOptions="Center">
+                        <DatePicker x:Name="DatePicker" BackgroundColor="{DynamicResource Gray100}" HorizontalOptions="Center" />
+                        <Button Text="Add" 
+                                BackgroundColor="{DynamicResource Primary}" 
+                                TextColor="White"
+                                CornerRadius="8"
+                                FontAttributes="Bold"
+                                Clicked="OnAddExpense" 
+                                HorizontalOptions="End" />
+                        <Button Text="Cancel" 
+                                BackgroundColor="{DynamicResource Gray300}" 
+                                TextColor="{DynamicResource Gray700}"
+                                CornerRadius="8"
+                                Clicked="OnHideAddPanel" 
+                                HorizontalOptions="End" />
+                    </HorizontalStackLayout>
+                    
+                    <Label x:Name="StatusLabel" FontSize="12" TextColor="{DynamicResource Primary}" HorizontalOptions="Center" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Expenses List with modern card design -->
+            <CollectionView x:Name="ExpensesList" 
+                            Grid.Row="2" 
+                            ItemsLayout="VerticalList" 
+                            SelectionMode="None"
+                            ItemsUpdatingScrollMode="KeepItemsInView"
+                            VerticalScrollBarVisibility="Never">
+                
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border StrokeShape="RoundRectangle 12" 
+                                BackgroundColor="White"
+                                Stroke="{DynamicResource Gray200}"
+                                StrokeThickness="1"
+                                Margin="0,4"
+                                Padding="0">
+                            <Border.Shadow>
+                                <Shadow Brush="Black" Offset="0,1" Radius="4" Opacity="0.08" />
+                            </Border.Shadow>
+                            
+                            <Grid Padding="16" ColumnDefinitions="60,*,Auto" RowDefinitions="Auto,Auto">
+                                <!-- Category Icon/Circle with dynamic color -->
+                                <Border Grid.RowSpan="2" 
+                                        StrokeShape="Ellipse"
+                                        BackgroundColor="{Binding CategoryId, Converter={StaticResource CategoryToColor}}"
+                                        HeightRequest="48"
+                                        WidthRequest="48"
+                                        VerticalOptions="Center">
+                                    <Label Text="{Binding CategoryId, Converter={StaticResource CategoryToIcon}}" 
+                                           FontSize="20"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center" />
+                                </Border>
+                                
+                                <!-- Description and Date -->
+                                <Label Grid.Column="1" Grid.Row="0"
+                                       Text="{Binding Note}" 
+                                       FontSize="16"
+                                       FontAttributes="Bold"
+                                       TextColor="{DynamicResource Gray900}"
+                                       LineBreakMode="TailTruncation" />
+                                
+                                <Label Grid.Column="1" Grid.Row="1"
+                                       Text="{Binding ExpenseDate, StringFormat='{}{0:MMM dd, yyyy}'}" 
+                                       FontSize="12"
+                                       TextColor="{DynamicResource Gray500}" />
+                                
+                                <!-- Amount -->
+                                <Label Grid.Column="2" Grid.RowSpan="2"
+                                       Text="{Binding Amount, StringFormat='R {0:F2}'}" 
+                                       FontSize="18"
+                                       FontAttributes="Bold"
+                                       TextColor="{DynamicResource Primary}"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="End" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout Padding="40" Spacing="12" HorizontalOptions="Center" VerticalOptions="Center">
+                        <Label Text="💳" FontSize="48" HorizontalOptions="Center" />
+                        <Label Text="No expenses yet" 
+                               FontSize="18" 
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource Gray600}"
+                               HorizontalOptions="Center" />
+                        <Label Text="Tap the + button to add your first expense" 
+                               FontSize="14" 
+                               TextColor="{DynamicResource Gray500}"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center" />
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+            </CollectionView>
+        </Grid>
+    </ScrollView>
+</ContentPage>

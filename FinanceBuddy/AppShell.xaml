@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="FinanceBuddy.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pages="clr-namespace:FinanceBuddy.Pages"
+    Title="FinanceBuddy">
+    <TabBar>
+        <Tab Title="Chat">
+            <ShellContent Title="Chat"
+                          Route="ChatPage"
+                          ContentTemplate="{DataTemplate pages:ChatPage}" />
+        </Tab>
+        <Tab Title="Expenses">
+            <ShellContent Title="Expenses"
+                          Route="ExpensesPage"
+                          ContentTemplate="{DataTemplate pages:ExpensesPage}" />
+        </Tab>
+    </TabBar>
+</Shell>
