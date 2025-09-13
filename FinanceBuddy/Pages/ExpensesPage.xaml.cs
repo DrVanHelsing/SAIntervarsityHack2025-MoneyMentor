@@ -1,26 +1,30 @@
-using FinanceBuddy.Services;
+﻿using FinanceBuddy.Services;
 using MoneyMentor.Shared.DTOs;
 using MoneyMentor.Shared.Models;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using CommunityToolkit.Maui.Alerts;
+using FinanceBuddy.Models;
 
 namespace FinanceBuddy.Pages;
 
 public partial class ExpensesPage : ContentPage
 {
     private readonly ApiClient _api;
+    private readonly IGamificationService _gamificationService;
     private readonly Guid _userId = Guid.Parse("00000000-0000-0000-0000-000000000001");
     
     public ObservableCollection<Expense> Expenses { get; } = new();
     private bool _hasLoadedInitialData = false;
 
     // Parameterless ctor for XAML DataTemplate
-    public ExpensesPage() : this(ServiceHelper.GetRequiredService<ApiClient>()) { }
+    public ExpensesPage() : this(ServiceHelper.GetRequiredService<ApiClient>(), ServiceHelper.GetRequiredService<IGamificationService>()) { }
 
-    public ExpensesPage(ApiClient apiClient)
+    public ExpensesPage(ApiClient apiClient, IGamificationService gamificationService)
     {
         InitializeComponent();
         _api = apiClient;
+        _gamificationService = gamificationService;
         Loaded += ExpensesPage_Loaded;
         ExpensesList.ItemsSource = Expenses; // Set ItemsSource in constructor
     }
@@ -122,7 +126,7 @@ public partial class ExpensesPage : ContentPage
                 }
                 
                 var total = items.Sum(i => i.Amount);
-                MainThread.BeginInvokeOnMainThread(() => HeaderSummaryLabel.Text = $"{items.Count} expenses � Total: R {total:F2}");
+                MainThread.BeginInvokeOnMainThread(() => HeaderSummaryLabel.Text = $"{items.Count} expenses • Total: R {total:F2}");
                 Debug.WriteLine($"Updated header with {items.Count} expenses, total R{total:F2}");
             }
             else
@@ -175,19 +179,19 @@ public partial class ExpensesPage : ContentPage
     {
         if (!decimal.TryParse(AmountEntry.Text, out decimal amount) || amount <= 0)
         {
-            StatusLabel.Text = "? Enter a valid positive amount";
+            StatusLabel.Text = "💰 Enter a valid positive amount";
             return;
         }
         
         if (!int.TryParse(CategoryEntry.Text, out int categoryId) || categoryId < 1 || categoryId > 5)
         {
-            StatusLabel.Text = "? Category must be between 1-5";
+            StatusLabel.Text = "📂 Category must be between 1-5";
             return;
         }
         
         if (string.IsNullOrWhiteSpace(NoteEntry.Text))
         {
-            StatusLabel.Text = "?? Please add a description";
+            StatusLabel.Text = "📝 Please add a description";
             return;
         }
 
@@ -196,7 +200,7 @@ public partial class ExpensesPage : ContentPage
 
         var dto = new ExpenseEntryDto(Guid.Empty, _userId, categoryId, amount, "ZAR", note, date);
         
-        StatusLabel.Text = "?? Saving expense...";
+        StatusLabel.Text = "💾 Saving expense...";
         Debug.WriteLine($"Adding new expense: {note} - R{amount}");
         
         try
@@ -205,15 +209,28 @@ public partial class ExpensesPage : ContentPage
             if (created == null)
             {
                 Debug.WriteLine("Failed to create expense - API returned null");
-                StatusLabel.Text = "? Failed to add expense";
+                StatusLabel.Text = "❌ Failed to add expense";
                 return;
             }
 
             Debug.WriteLine($"Successfully created expense: {created.ExpenseId}");
-            StatusLabel.Text = "? Expense added successfully!";
+            
+            // Award gamification points for logging expense
+            await _gamificationService.LogExpenseAsync();
+            
+            StatusLabel.Text = "✅ Expense added successfully!";
             ClearForm();
             await LoadAsync();
             AddPanel.IsVisible = false;
+            
+            // Show gamification feedback
+            await ShowGamificationFeedback();
+            
+            // Refresh plant status
+            if (PlantStatus != null)
+            {
+                await PlantStatus.RefreshAsync();
+            }
             
             // Clear success message after a delay
             await Task.Delay(2000);
@@ -223,7 +240,36 @@ public partial class ExpensesPage : ContentPage
         catch (Exception ex)
         {
             Debug.WriteLine($"Error adding expense: {ex}");
-            StatusLabel.Text = $"? Error: {ex.Message}";
+            StatusLabel.Text = $"❌ Error: {ex.Message}";
+        }
+    }
+    
+    private async Task ShowGamificationFeedback()
+    {
+        try
+        {
+            var profile = await _gamificationService.GetProfileAsync();
+            var message = $"🌱 Plant grows! +{MoneyWiseEvents.ExpenseLoggedPoints} points";
+            
+            // Check if it's first expense of the day for bonus
+            if (profile.LastExpenseDate.Date != DateTime.Today)
+            {
+                message += $" (+{MoneyWiseEvents.FirstExpenseOfDayPoints} daily bonus)";
+            }
+            
+            // Check for level up
+            var (leveledUp, newStage) = await _gamificationService.CheckForLevelUpAsync();
+            if (leveledUp)
+            {
+                message += $"\n🥳 Level up! Now {PlantGrowthHelper.GetStageDisplayName(newStage)}!";
+            }
+            
+            var snackbar = Snackbar.Make(message);
+            await snackbar.Show();
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error showing gamification feedback: {ex}");
         }
     }
 }

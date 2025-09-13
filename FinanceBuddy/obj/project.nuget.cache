@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "zXSMh4bzPec=",
+  "dgSpecHash": "MgxPkpAQZ2s=",
   "success": true,
-  "projectFilePath": "C:\\MAUI Applications\\FinanceBuddySln\\FinanceBuddy\\FinanceBuddy.csproj",
+  "projectFilePath": "C:\\MAUI Applications\\SAIntervarsityHack2025-MoneyMentor\\FinanceBuddy\\FinanceBuddy.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\tredi\\.nuget\\packages\\communitytoolkit.maui\\11.2.0\\communitytoolkit.maui.11.2.0.nupkg.sha512",
     "C:\\Users\\tredi\\.nuget\\packages\\communitytoolkit.maui.core\\11.2.0\\communitytoolkit.maui.core.11.2.0.nupkg.sha512",
@@ -127,13 +127,6 @@
     "C:\\Users\\tredi\\.nuget\\packages\\xamarin.kotlinx.coroutines.core.jvm\\1.9.0.3\\xamarin.kotlinx.coroutines.core.jvm.1.9.0.3.nupkg.sha512",
     "C:\\Users\\tredi\\.nuget\\packages\\xamarin.kotlinx.serialization.core\\1.7.3.4\\xamarin.kotlinx.serialization.core.1.7.3.4.nupkg.sha512",
     "C:\\Users\\tredi\\.nuget\\packages\\xamarin.kotlinx.serialization.core.jvm\\1.7.3.4\\xamarin.kotlinx.serialization.core.jvm.1.7.3.4.nupkg.sha512",
-    "C:\\Users\\tredi\\.nuget\\packages\\microsoft.android.runtime.35.android-arm64\\35.0.101\\microsoft.android.runtime.35.android-arm64.35.0.101.nupkg.sha512",
-    "C:\\Users\\tredi\\.nuget\\packages\\microsoft.android.runtime.35.android-x64\\35.0.101\\microsoft.android.runtime.35.android-x64.35.0.101.nupkg.sha512",
-    "C:\\Users\\tredi\\.nuget\\packages\\microsoft.android.ref.35\\35.0.101\\microsoft.android.ref.35.35.0.101.nupkg.sha512",
-    "C:\\Users\\tredi\\.nuget\\packages\\microsoft.ios.ref.net9.0_18.5\\18.5.9219\\microsoft.ios.ref.net9.0_18.5.18.5.9219.nupkg.sha512",
-    "C:\\Users\\tredi\\.nuget\\packages\\microsoft.ios.runtime.iossimulator-x64.net9.0_18.5\\18.5.9219\\microsoft.ios.runtime.iossimulator-x64.net9.0_18.5.18.5.9219.nupkg.sha512",
-    "C:\\Users\\tredi\\.nuget\\packages\\microsoft.maccatalyst.ref.net9.0_18.5\\18.5.9219\\microsoft.maccatalyst.ref.net9.0_18.5.18.5.9219.nupkg.sha512",
-    "C:\\Users\\tredi\\.nuget\\packages\\microsoft.maccatalyst.runtime.maccatalyst-x64.net9.0_18.5\\18.5.9219\\microsoft.maccatalyst.runtime.maccatalyst-x64.net9.0_18.5.18.5.9219.nupkg.sha512",
     "C:\\Users\\tredi\\.nuget\\packages\\microsoft.windows.sdk.net.ref\\10.0.19041.57\\microsoft.windows.sdk.net.ref.10.0.19041.57.nupkg.sha512"
   ],
   "logs": []

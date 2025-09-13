@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 
 namespace FinanceBuddy.Converters;
 
@@ -35,15 +35,15 @@ public class CategoryToIconConverter : IValueConverter
         {
             return categoryId switch
             {
-                1 => "??", // Transport
-                2 => "??", // Food
-                3 => "??", // Health
-                4 => "??", // Entertainment  
-                5 => "?", // Utilities
-                _ => "??"  // Default
+                1 => "🚇", // Transport
+                2 => "🍔🧋", // Food
+                3 => "💊", // Health
+                4 => "🌟🎥", // Entertainment  
+                5 => "💡", // Utilities
+                _ => "🥇"  // Default
             };
         }
-        return "??";
+        return "😀";
     }
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)

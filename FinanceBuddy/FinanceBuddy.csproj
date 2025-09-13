@@ -44,4 +44,13 @@
 		<ProjectReference Include="..\MoneyMentor.Shared\MoneyMentor.Shared.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <MauiXaml Update="Components\PlantStatusView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\GamificationTestPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	</ItemGroup>
+
 </Project>

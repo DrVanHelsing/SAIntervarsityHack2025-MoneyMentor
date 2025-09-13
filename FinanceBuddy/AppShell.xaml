@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:pages="clr-namespace:FinanceBuddy.Pages"
     Title="FinanceBuddy">
+    
     <TabBar>
         <Tab Title="Chat">
             <ShellContent Title="Chat"
@@ -15,6 +16,11 @@
             <ShellContent Title="Expenses"
                           Route="ExpensesPage"
                           ContentTemplate="{DataTemplate pages:ExpensesPage}" />
+        </Tab>
+        <Tab Title="Plant Care">
+            <ShellContent Title="Plant Care"
+                          Route="GamificationTestPage"
+                          ContentTemplate="{DataTemplate pages:GamificationTestPage}" />
         </Tab>
     </TabBar>
 </Shell>

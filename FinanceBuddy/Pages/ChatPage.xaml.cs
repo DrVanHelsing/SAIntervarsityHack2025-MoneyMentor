@@ -11,6 +11,7 @@ public partial class ChatPage : ContentPage
 {
     private readonly ApiClient _api;
     private readonly ITranslationService _translationService;
+    private readonly IGamificationService _gamificationService;
 
     public ObservableCollection<ChatBubble> Messages { get; } = new();
 
@@ -26,20 +27,24 @@ public partial class ChatPage : ContentPage
     private bool _autoDetectEnabled;
 
     // Parameterless ctor for XAML (Shell DataTemplate) support
-    public ChatPage() : this(ServiceHelper.GetRequiredService<ApiClient>(), ServiceHelper.GetRequiredService<ITranslationService>()) { }
+    public ChatPage() : this(
+        ServiceHelper.GetRequiredService<ApiClient>(), 
+        ServiceHelper.GetRequiredService<ITranslationService>(),
+        ServiceHelper.GetRequiredService<IGamificationService>()) { }
 
-    public ChatPage(ApiClient apiClient, ITranslationService translationService)
+    public ChatPage(ApiClient apiClient, ITranslationService translationService, IGamificationService gamificationService)
     {
         InitializeComponent();
         _api = apiClient;
         _translationService = translationService;
+        _gamificationService = gamificationService;
         _currentLanguage = LanguageHelper.GetDefaultLanguage();
 
         MessagesView.ItemsSource = Messages;
         InitializeLanguagePicker();
         
         // Seed greeting
-        Messages.Add(new ChatBubble { Text = "Hi, I'm your Money Mentor. Ask me a finance question!", IsUser = false });
+        Messages.Add(new ChatBubble { Text = "Hi, I'm your Money Mentor. Ask me a finance question to grow your plant! ??", IsUser = false });
         UpdateDetectedLanguageLabel();
     }
 
@@ -140,6 +145,9 @@ public partial class ChatPage : ContentPage
             
             string responseText = resp?.Answer ?? "(no response)";
             
+            // Award points for engaging with financial learning
+            await _gamificationService.LogChatInteractionAsync();
+            
             // Translate response back to user's language if needed
             if (!string.Equals(userTranslateCode, "en", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(responseText))
             {
@@ -147,6 +155,13 @@ public partial class ChatPage : ContentPage
             }
             
             Messages.Add(new ChatBubble { Text = responseText, IsUser = false, Timestamp = DateTime.Now });
+            
+            // Refresh plant status after learning interaction
+            if (PlantStatus != null)
+            {
+                await PlantStatus.RefreshAsync();
+            }
+            
             ScrollToBottom();
         }
         catch (Exception ex)

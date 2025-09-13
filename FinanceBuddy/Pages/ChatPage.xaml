@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:components="clr-namespace:FinanceBuddy.Components"
              x:Class="FinanceBuddy.Pages.ChatPage"
              Title="Chat">
-    <Grid RowDefinitions="Auto,Auto,Auto,*,Auto" BackgroundColor="{StaticResource Background}">
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,*,Auto" BackgroundColor="{StaticResource Background}">
+        
+        <!-- Plant Status -->
+        <components:PlantStatusView x:Name="PlantStatus" Grid.Row="0" Margin="12,8" />
+        
         <!-- Header -->
-        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Padding="12" BackgroundColor="{StaticResource Background}">
+        <Grid Grid.Row="1" ColumnDefinitions="*,Auto" Padding="12" BackgroundColor="{StaticResource Background}">
             <Label Text="Money Mentor" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
             <Label Grid.Column="1" Text="Connected" FontSize="10" TextColor="{StaticResource TextSecondary}" HorizontalTextAlignment="End" VerticalTextAlignment="Center" />
         </Grid>
 
         <!-- Language Selection & Auto Detect Toggle -->
-        <Grid Grid.Row="1" ColumnDefinitions="Auto,*,Auto" Padding="12,0,12,4" BackgroundColor="{StaticResource Background}" ColumnSpacing="8">
+        <Grid Grid.Row="2" ColumnDefinitions="Auto,*,Auto" Padding="12,0,12,4" BackgroundColor="{StaticResource Background}" ColumnSpacing="8">
             <Label Text="Language:" VerticalOptions="Center" TextColor="{StaticResource TextPrimary}" FontSize="14" />
             <Picker x:Name="LanguagePicker" 
                     Grid.Column="1" 
@@ -29,10 +34,10 @@
         </Grid>
 
         <!-- Current Detected Language Display -->
-        <Label Grid.Row="2" x:Name="DetectedLanguageLabel" Text="" FontSize="12" TextColor="{StaticResource TextSecondary}" Padding="12,0,12,4"/>
+        <Label Grid.Row="3" x:Name="DetectedLanguageLabel" Text="" FontSize="12" TextColor="{StaticResource TextSecondary}" Padding="12,0,12,4"/>
 
         <!-- Messages -->
-        <CollectionView x:Name="MessagesView" Grid.Row="3" Margin="8" BackgroundColor="{StaticResource Background}">
+        <CollectionView x:Name="MessagesView" Grid.Row="4" Margin="8" BackgroundColor="{StaticResource Background}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Grid Padding="4">
@@ -74,7 +79,7 @@
         </CollectionView>
 
         <!-- Input Area -->
-        <Grid Grid.Row="4" ColumnDefinitions="*,Auto" Padding="8" BackgroundColor="{StaticResource Surface}" Margin="8">
+        <Grid Grid.Row="5" ColumnDefinitions="*,Auto" Padding="8" BackgroundColor="{StaticResource Surface}" Margin="8">
             <Entry x:Name="InputEntry" Grid.Column="0" Placeholder="Type your message" TextColor="{StaticResource TextPrimary}" PlaceholderColor="{StaticResource TextSecondary}" BackgroundColor="Transparent" HeightRequest="44" VerticalOptions="Center" />
             <Button Grid.Column="1" Text="Send" Clicked="OnSend" BackgroundColor="{StaticResource Primary}" TextColor="{StaticResource White}" Margin="8,0,0,0" />
         </Grid>

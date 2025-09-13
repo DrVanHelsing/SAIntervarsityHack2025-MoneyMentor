@@ -26,11 +26,13 @@ namespace FinanceBuddy
             // Register services for dependency injection
             builder.Services.AddHttpClient<ApiClient>();
             builder.Services.AddSingleton<ITranslationService, TranslationService>();
+            builder.Services.AddSingleton<IGamificationService, GamificationService>();
             
             // Register pages and shell
             builder.Services.AddSingleton<AppShell>();
             builder.Services.AddTransient<ExpensesPage>();
             builder.Services.AddTransient<ChatPage>();
+            builder.Services.AddTransient<GamificationTestPage>();
 
             var app = builder.Build();
             ServiceHelper.Initialize(app.Services);

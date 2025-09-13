@@ -4,8 +4,6 @@ build_property.EnableSingleFileAnalyzer =
 build_property.EnableTrimAnalyzer = false
 build_property.IncludeAllContentForSelfExtract = 
 build_property.TargetFramework = net9.0-ios
-build_property.TargetFrameworkIdentifier = .NETCoreApp
-build_property.TargetFrameworkVersion = v9.0
 build_property.TargetPlatformMinVersion = 
 build_property.UsingMicrosoftNETSdkWeb = 
 build_property.ProjectTypeGuids = 
@@ -14,49 +12,61 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = FinanceBuddy
-build_property.ProjectDir = C:\MAUI Applications\FinanceBuddySln\FinanceBuddy\
+build_property.ProjectDir = C:\MAUI Applications\SAIntervarsityHack2025-MoneyMentor\FinanceBuddy\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.EffectiveAnalysisLevelStyle = 9.0
 build_property.EnableCodeStyleSeverity = 
 
-[C:/MAUI Applications/FinanceBuddySln/FinanceBuddy/App.xaml]
+[C:/MAUI Applications/SAIntervarsityHack2025-MoneyMentor/FinanceBuddy/App.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = FinanceBuddy.App.xaml
 build_metadata.AdditionalFiles.TargetPath = App.xaml
 build_metadata.AdditionalFiles.RelativePath = App.xaml
 
-[C:/MAUI Applications/FinanceBuddySln/FinanceBuddy/AppShell.xaml]
+[C:/MAUI Applications/SAIntervarsityHack2025-MoneyMentor/FinanceBuddy/AppShell.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = FinanceBuddy.AppShell.xaml
 build_metadata.AdditionalFiles.TargetPath = AppShell.xaml
 build_metadata.AdditionalFiles.RelativePath = AppShell.xaml
 
-[C:/MAUI Applications/FinanceBuddySln/FinanceBuddy/MainPage.xaml]
+[C:/MAUI Applications/SAIntervarsityHack2025-MoneyMentor/FinanceBuddy/Components/PlantStatusView.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = FinanceBuddy.Components.PlantStatusView.xaml
+build_metadata.AdditionalFiles.TargetPath = Components\PlantStatusView.xaml
+build_metadata.AdditionalFiles.RelativePath = Components\PlantStatusView.xaml
+
+[C:/MAUI Applications/SAIntervarsityHack2025-MoneyMentor/FinanceBuddy/MainPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = FinanceBuddy.MainPage.xaml
 build_metadata.AdditionalFiles.TargetPath = MainPage.xaml
 build_metadata.AdditionalFiles.RelativePath = MainPage.xaml
 
-[C:/MAUI Applications/FinanceBuddySln/FinanceBuddy/Pages/ChatPage.xaml]
+[C:/MAUI Applications/SAIntervarsityHack2025-MoneyMentor/FinanceBuddy/Pages/ChatPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = FinanceBuddy.Pages.ChatPage.xaml
 build_metadata.AdditionalFiles.TargetPath = Pages\ChatPage.xaml
 build_metadata.AdditionalFiles.RelativePath = Pages\ChatPage.xaml
 
-[C:/MAUI Applications/FinanceBuddySln/FinanceBuddy/Pages/ExpensesPage.xaml]
+[C:/MAUI Applications/SAIntervarsityHack2025-MoneyMentor/FinanceBuddy/Pages/ExpensesPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = FinanceBuddy.Pages.ExpensesPage.xaml
 build_metadata.AdditionalFiles.TargetPath = Pages\ExpensesPage.xaml
 build_metadata.AdditionalFiles.RelativePath = Pages\ExpensesPage.xaml
 
-[C:/MAUI Applications/FinanceBuddySln/FinanceBuddy/Resources/Styles/Colors.xaml]
+[C:/MAUI Applications/SAIntervarsityHack2025-MoneyMentor/FinanceBuddy/Pages/GamificationTestPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = FinanceBuddy.Pages.GamificationTestPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Pages\GamificationTestPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Pages\GamificationTestPage.xaml
+
+[C:/MAUI Applications/SAIntervarsityHack2025-MoneyMentor/FinanceBuddy/Resources/Styles/Colors.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = FinanceBuddy.Resources.Styles.Colors.xaml
 build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Colors.xaml
 build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Colors.xaml
 
-[C:/MAUI Applications/FinanceBuddySln/FinanceBuddy/Resources/Styles/Styles.xaml]
+[C:/MAUI Applications/SAIntervarsityHack2025-MoneyMentor/FinanceBuddy/Resources/Styles/Styles.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = FinanceBuddy.Resources.Styles.Styles.xaml
 build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Styles.xaml

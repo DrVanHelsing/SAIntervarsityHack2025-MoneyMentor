@@ -8,7 +8,7 @@
       },
       {
         "name": "Microsoft.MacCatalyst",
-        "version": "18.5.9219"
+        "version": "18.5.9214"
       }
     ],
     "configProperties": {
@@ -20,7 +20,6 @@
       "System.Diagnostics.Tracing.EventSource.IsSupported": false,
       "System.Globalization.Invariant": false,
       "System.Globalization.Hybrid": true,
-      "System.Linq.Enumerable.IsSizeOptimized": true,
       "System.Net.Http.UseNativeHttpHandler": true,
       "System.Reflection.NullabilityInfoContext.IsSupported": false,
       "System.Resources.ResourceManager.AllowCustomResourceTypes": false,

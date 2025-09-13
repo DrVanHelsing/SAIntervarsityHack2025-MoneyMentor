@@ -1,0 +1,7 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <!-- Simple seed representation -->
+  <ellipse cx="32" cy="45" rx="8" ry="6" fill="#8B4513" stroke="#654321" stroke-width="1"/>
+  <ellipse cx="32" cy="44" rx="6" ry="4" fill="#A0522D"/>
+  <!-- Small soil mound -->
+  <ellipse cx="32" cy="55" rx="20" ry="4" fill="#8B7355"/>
+</svg>

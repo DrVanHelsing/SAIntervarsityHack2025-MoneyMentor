@@ -15,10 +15,10 @@
           "Microsoft.Extensions.Logging.Debug": "9.0.5",
           "Microsoft.Maui.Controls": "9.0.82",
           "MoneyMentor.Shared": "1.0.0",
-          "Microsoft.Maui.Controls.HotReload.Forms": "18.0.0.0",
-          "Microsoft.VisualStudio.DesignTools.MobileTapContracts": "18.0.0.0",
-          "Microsoft.VisualStudio.DesignTools.TapContract": "18.0.0.0",
-          "Microsoft.VisualStudio.DesignTools.XamlTapContract": "18.0.0.0",
+          "Microsoft.Maui.Controls.HotReload.Forms": "17.0.0.0",
+          "Microsoft.VisualStudio.DesignTools.MobileTapContracts": "17.0.0.0",
+          "Microsoft.VisualStudio.DesignTools.TapContract": "17.0.0.0",
+          "Microsoft.VisualStudio.DesignTools.XamlTapContract": "17.0.0.0",
           "Microsoft.Web.WebView2.Core.Projection": "1.0.3179.45",
           "runtimepack.Microsoft.Windows.SDK.NET.Ref": "10.0.19041.57"
         },
@@ -283,6 +283,14 @@
       },
       "Microsoft.Maui.Controls/9.0.82": {
         "dependencies": {
+          "Microsoft.Maui.Controls.Build.Tasks": "9.0.82",
+          "Microsoft.Maui.Controls.Core": "9.0.82",
+          "Microsoft.Maui.Controls.Xaml": "9.0.82",
+          "Microsoft.Maui.Resizetizer": "9.0.82"
+        }
+      },
+      "Microsoft.Maui.Controls.Build.Tasks/9.0.82": {
+        "dependencies": {
           "Microsoft.Maui.Controls.Core": "9.0.82",
           "Microsoft.Maui.Controls.Xaml": "9.0.82"
         }
@@ -430,6 +438,7 @@
           "Microsoft.Maui.Graphics": "9.0.82",
           "Microsoft.Maui.Graphics.Win2D.WinUI.Desktop": "9.0.82",
           "Microsoft.Web.WebView2": "1.0.3179.45",
+          "Microsoft.Windows.SDK.BuildTools": "10.0.22621.756",
           "Microsoft.WindowsAppSDK": "1.7.250513003"
         },
         "runtime": {
@@ -475,6 +484,7 @@
           }
         }
       },
+      "Microsoft.Maui.Resizetizer/9.0.82": {},
       "Microsoft.Web.WebView2/1.0.3179.45": {
         "native": {
           "runtimes/win-x64/native/WebView2Loader.dll": {
@@ -482,9 +492,11 @@
           }
         }
       },
+      "Microsoft.Windows.SDK.BuildTools/10.0.22621.756": {},
       "Microsoft.WindowsAppSDK/1.7.250513003": {
         "dependencies": {
-          "Microsoft.Web.WebView2": "1.0.3179.45"
+          "Microsoft.Web.WebView2": "1.0.3179.45",
+          "Microsoft.Windows.SDK.BuildTools": "10.0.22621.756"
         },
         "runtime": {
           "lib/net6.0-windows10.0.18362.0/Microsoft.Graphics.Imaging.Projection.dll": {
@@ -613,35 +625,35 @@
           }
         }
       },
-      "Microsoft.Maui.Controls.HotReload.Forms/18.0.0.0": {
+      "Microsoft.Maui.Controls.HotReload.Forms/17.0.0.0": {
         "runtime": {
           "Microsoft.Maui.Controls.HotReload.Forms.dll": {
-            "assemblyVersion": "18.0.0.0",
-            "fileVersion": "18.0.3339.61685"
+            "assemblyVersion": "17.0.0.0",
+            "fileVersion": "17.14.40460.7212"
           }
         }
       },
-      "Microsoft.VisualStudio.DesignTools.MobileTapContracts/18.0.0.0": {
+      "Microsoft.VisualStudio.DesignTools.MobileTapContracts/17.0.0.0": {
         "runtime": {
           "Microsoft.VisualStudio.DesignTools.MobileTapContracts.dll": {
-            "assemblyVersion": "18.0.0.0",
-            "fileVersion": "18.0.3339.61685"
+            "assemblyVersion": "17.0.0.0",
+            "fileVersion": "17.14.40460.7212"
           }
         }
       },
-      "Microsoft.VisualStudio.DesignTools.TapContract/18.0.0.0": {
+      "Microsoft.VisualStudio.DesignTools.TapContract/17.0.0.0": {
         "runtime": {
           "Microsoft.VisualStudio.DesignTools.TapContract.dll": {
-            "assemblyVersion": "18.0.0.0",
-            "fileVersion": "18.0.3339.61685"
+            "assemblyVersion": "17.0.0.0",
+            "fileVersion": "17.14.40460.7212"
           }
         }
       },
-      "Microsoft.VisualStudio.DesignTools.XamlTapContract/18.0.0.0": {
+      "Microsoft.VisualStudio.DesignTools.XamlTapContract/17.0.0.0": {
         "runtime": {
           "Microsoft.VisualStudio.DesignTools.XamlTapContract.dll": {
-            "assemblyVersion": "18.0.0.0",
-            "fileVersion": "18.0.3339.61685"
+            "assemblyVersion": "17.0.0.0",
+            "fileVersion": "17.14.40460.7212"
           }
         }
       },
@@ -806,6 +818,13 @@
       "path": "microsoft.maui.controls/9.0.82",
       "hashPath": "microsoft.maui.controls.9.0.82.nupkg.sha512"
     },
+    "Microsoft.Maui.Controls.Build.Tasks/9.0.82": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-6AcZJM3Ra6XKUb7fylipcOgANPdVgP3sVx25RFkAdBMwOj0zg15nMpoDqXLtm1rmB5s2Nm0DCV5+mx046VFlcQ==",
+      "path": "microsoft.maui.controls.build.tasks/9.0.82",
+      "hashPath": "microsoft.maui.controls.build.tasks.9.0.82.nupkg.sha512"
+    },
     "Microsoft.Maui.Controls.Core/9.0.82": {
       "type": "package",
       "serviceable": true,
@@ -848,12 +867,26 @@
       "path": "microsoft.maui.graphics.win2d.winui.desktop/9.0.82",
       "hashPath": "microsoft.maui.graphics.win2d.winui.desktop.9.0.82.nupkg.sha512"
     },
+    "Microsoft.Maui.Resizetizer/9.0.82": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-p1gLypMt1WPWIYlRQIiECZFhTSENVv0ZYPyT5H40wDsg6gD0R4m+z8z4IJWFCdQjIekqhCz1c/4JSBQDpJHO2A==",
+      "path": "microsoft.maui.resizetizer/9.0.82",
+      "hashPath": "microsoft.maui.resizetizer.9.0.82.nupkg.sha512"
+    },
     "Microsoft.Web.WebView2/1.0.3179.45": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-3pokSH5CnN0G6rGhGFo1y87inxYhNxBQ2Vdf0wlvBj99KHxQJormjDACmqRnFeUsmuNFIhWwfAL1ztq7wD5qRA==",
       "path": "microsoft.web.webview2/1.0.3179.45",
       "hashPath": "microsoft.web.webview2.1.0.3179.45.nupkg.sha512"
+    },
+    "Microsoft.Windows.SDK.BuildTools/10.0.22621.756": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-7ZL2sFSioYm1Ry067Kw1hg0SCcW5kuVezC2SwjGbcPE61Nn+gTbH86T73G3LcEOVj0S3IZzNuE/29gZvOLS7VA==",
+      "path": "microsoft.windows.sdk.buildtools/10.0.22621.756",
+      "hashPath": "microsoft.windows.sdk.buildtools.10.0.22621.756.nupkg.sha512"
     },
     "Microsoft.WindowsAppSDK/1.7.250513003": {
       "type": "package",
@@ -874,22 +907,22 @@
       "serviceable": false,
       "sha512": ""
     },
-    "Microsoft.Maui.Controls.HotReload.Forms/18.0.0.0": {
+    "Microsoft.Maui.Controls.HotReload.Forms/17.0.0.0": {
       "type": "reference",
       "serviceable": false,
       "sha512": ""
     },
-    "Microsoft.VisualStudio.DesignTools.MobileTapContracts/18.0.0.0": {
+    "Microsoft.VisualStudio.DesignTools.MobileTapContracts/17.0.0.0": {
       "type": "reference",
       "serviceable": false,
       "sha512": ""
     },
-    "Microsoft.VisualStudio.DesignTools.TapContract/18.0.0.0": {
+    "Microsoft.VisualStudio.DesignTools.TapContract/17.0.0.0": {
       "type": "reference",
       "serviceable": false,
       "sha512": ""
     },
-    "Microsoft.VisualStudio.DesignTools.XamlTapContract/18.0.0.0": {
+    "Microsoft.VisualStudio.DesignTools.XamlTapContract/17.0.0.0": {
       "type": "reference",
       "serviceable": false,
       "sha512": ""
