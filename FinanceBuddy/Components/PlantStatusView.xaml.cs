@@ -16,14 +16,25 @@ public partial class PlantStatusView : ContentView, INotifyPropertyChanged
         _gamificationService = ServiceHelper.GetRequiredService<IGamificationService>();
         BindingContext = this;
         
-        // Load data when the component is loaded
+        // Load data when the component is loaded - use cross-platform approach
+#if WINDOWS
         Loaded += OnLoaded;
+#else
+        // For non-Windows platforms, load immediately
+        _ = Task.Run(async () =>
+        {
+            await Task.Delay(100); // Small delay to ensure UI is ready
+            await RefreshAsync();
+        });
+#endif
     }
 
+#if WINDOWS
     private async void OnLoaded(object? sender, EventArgs e)
     {
         await RefreshAsync();
     }
+#endif
 
     public async Task RefreshAsync()
     {
@@ -62,18 +73,72 @@ public partial class PlantStatusView : ContentView, INotifyPropertyChanged
                               $"?? Goals set: {_profile.SavingsGoalsSet}\n" +
                               $"? Goals achieved: {_profile.SavingsGoalsAchieved}";
             
-            var mainPage = Application.Current?.Windows?.FirstOrDefault()?.Page;
-            if (mainPage != null)
-            {
-                await mainPage.DisplayAlert(
-                    $"Your {_profile.CurrentStageDisplayName} Plant", 
-                    detailedInfo, 
-                    "Keep Growing!");
-            }
+            // Cross-platform alert display
+            await ShowAlertAsync(
+                $"Your {_profile.CurrentStageDisplayName} Plant", 
+                detailedInfo, 
+                "Keep Growing!");
         }
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"Error showing plant details: {ex.Message}");
+        }
+    }
+
+    private async Task ShowAlertAsync(string title, string message, string cancel)
+    {
+        try
+        {
+#if WINDOWS
+            // For Windows, use the native DisplayAlert if available
+            var mainPage = Application.Current?.Windows?.FirstOrDefault()?.Page;
+            if (mainPage != null)
+            {
+                await mainPage.DisplayAlert(title, message, cancel);
+                return;
+            }
+#endif
+            // Fallback for all platforms - find the current page
+            var currentPage = GetCurrentPage();
+            if (currentPage != null)
+            {
+                await currentPage.DisplayAlert(title, message, cancel);
+            }
+            else
+            {
+                // Last resort - use a snackbar from CommunityToolkit.Maui
+                var snackbar = Snackbar.Make($"{title}: {message}", duration: TimeSpan.FromSeconds(5));
+                await snackbar.Show();
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error showing alert: {ex.Message}");
+            // Final fallback - just log the information
+            System.Diagnostics.Debug.WriteLine($"Plant Info - {title}: {message}");
+        }
+    }
+
+    private Page? GetCurrentPage()
+    {
+        try
+        {
+            // Try to get current page through the app's main page
+            if (Application.Current?.MainPage is Shell shell)
+            {
+                return shell.CurrentPage;
+            }
+            
+            if (Application.Current?.MainPage is NavigationPage navPage)
+            {
+                return navPage.CurrentPage;
+            }
+            
+            return Application.Current?.MainPage;
+        }
+        catch
+        {
+            return null;
         }
     }
 

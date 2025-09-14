@@ -34,24 +34,87 @@ public class GamificationService : IGamificationService
     private const string WEEKLY_REVIEWS_KEY = "gamification_weekly_reviews";
     private const string LAST_CELEBRATION_KEY = "gamification_last_celebration";
     
+    // Cross-platform safe preference access with proper type handling
+    private static int GetIntPreference(string key, int defaultValue)
+    {
+        try
+        {
+            return Microsoft.Maui.Storage.Preferences.Get(key, defaultValue);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error getting int preference {key}: {ex.Message}");
+            return defaultValue;
+        }
+    }
+    
+    private static string GetStringPreference(string key, string defaultValue)
+    {
+        try
+        {
+            return Microsoft.Maui.Storage.Preferences.Get(key, defaultValue);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error getting string preference {key}: {ex.Message}");
+            return defaultValue;
+        }
+    }
+    
+    private static void SetIntPreference(string key, int value)
+    {
+        try
+        {
+            Microsoft.Maui.Storage.Preferences.Set(key, value);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error setting int preference {key}: {ex.Message}");
+        }
+    }
+    
+    private static void SetStringPreference(string key, string value)
+    {
+        try
+        {
+            Microsoft.Maui.Storage.Preferences.Set(key, value);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error setting string preference {key}: {ex.Message}");
+        }
+    }
+    
+    private static void RemovePreference(string key)
+    {
+        try
+        {
+            Microsoft.Maui.Storage.Preferences.Remove(key);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error removing preference {key}: {ex.Message}");
+        }
+    }
+    
     public async Task<GamificationProfile> GetProfileAsync()
     {
         await Task.CompletedTask; // For async interface consistency
         
         return new GamificationProfile
         {
-            TotalPoints = Preferences.Get(TOTAL_POINTS_KEY, 0),
-            CurrentStreak = Preferences.Get(CURRENT_STREAK_KEY, 0),
-            LastActiveDate = DateTime.TryParse(Preferences.Get(LAST_ACTIVE_DATE_KEY, ""), out var lastActive) ? lastActive : DateTime.MinValue,
-            LastExpenseDate = DateTime.TryParse(Preferences.Get(LAST_EXPENSE_DATE_KEY, ""), out var lastExpense) ? lastExpense : DateTime.MinValue,
-            TotalExpensesLogged = Preferences.Get(TOTAL_EXPENSES_KEY, 0),
-            DaysWithBudgetCompliance = Preferences.Get(BUDGET_COMPLIANCE_DAYS_KEY, 0),
-            FinancialLessonsRead = Preferences.Get(FINANCIAL_LESSONS_KEY, 0),
-            SavingsGoalsSet = Preferences.Get(SAVINGS_GOALS_SET_KEY, 0),
-            SavingsGoalsAchieved = Preferences.Get(SAVINGS_GOALS_ACHIEVED_KEY, 0),
-            ChatInteractions = Preferences.Get(CHAT_INTERACTIONS_KEY, 0),
-            WeeklyReviewsCompleted = Preferences.Get(WEEKLY_REVIEWS_KEY, 0),
-            LastPlantCelebration = DateTime.TryParse(Preferences.Get(LAST_CELEBRATION_KEY, ""), out var lastCelebration) ? lastCelebration : DateTime.MinValue
+            TotalPoints = GetIntPreference(TOTAL_POINTS_KEY, 0),
+            CurrentStreak = GetIntPreference(CURRENT_STREAK_KEY, 0),
+            LastActiveDate = DateTime.TryParse(GetStringPreference(LAST_ACTIVE_DATE_KEY, ""), out var lastActive) ? lastActive : DateTime.MinValue,
+            LastExpenseDate = DateTime.TryParse(GetStringPreference(LAST_EXPENSE_DATE_KEY, ""), out var lastExpense) ? lastExpense : DateTime.MinValue,
+            TotalExpensesLogged = GetIntPreference(TOTAL_EXPENSES_KEY, 0),
+            DaysWithBudgetCompliance = GetIntPreference(BUDGET_COMPLIANCE_DAYS_KEY, 0),
+            FinancialLessonsRead = GetIntPreference(FINANCIAL_LESSONS_KEY, 0),
+            SavingsGoalsSet = GetIntPreference(SAVINGS_GOALS_SET_KEY, 0),
+            SavingsGoalsAchieved = GetIntPreference(SAVINGS_GOALS_ACHIEVED_KEY, 0),
+            ChatInteractions = GetIntPreference(CHAT_INTERACTIONS_KEY, 0),
+            WeeklyReviewsCompleted = GetIntPreference(WEEKLY_REVIEWS_KEY, 0),
+            LastPlantCelebration = DateTime.TryParse(GetStringPreference(LAST_CELEBRATION_KEY, ""), out var lastCelebration) ? lastCelebration : DateTime.MinValue
         };
     }
     
@@ -214,35 +277,35 @@ public class GamificationService : IGamificationService
     {
         await Task.CompletedTask;
         
-        Preferences.Remove(TOTAL_POINTS_KEY);
-        Preferences.Remove(CURRENT_STREAK_KEY);
-        Preferences.Remove(LAST_ACTIVE_DATE_KEY);
-        Preferences.Remove(LAST_EXPENSE_DATE_KEY);
-        Preferences.Remove(TOTAL_EXPENSES_KEY);
-        Preferences.Remove(BUDGET_COMPLIANCE_DAYS_KEY);
-        Preferences.Remove(FINANCIAL_LESSONS_KEY);
-        Preferences.Remove(SAVINGS_GOALS_SET_KEY);
-        Preferences.Remove(SAVINGS_GOALS_ACHIEVED_KEY);
-        Preferences.Remove(CHAT_INTERACTIONS_KEY);
-        Preferences.Remove(WEEKLY_REVIEWS_KEY);
-        Preferences.Remove(LAST_CELEBRATION_KEY);
+        RemovePreference(TOTAL_POINTS_KEY);
+        RemovePreference(CURRENT_STREAK_KEY);
+        RemovePreference(LAST_ACTIVE_DATE_KEY);
+        RemovePreference(LAST_EXPENSE_DATE_KEY);
+        RemovePreference(TOTAL_EXPENSES_KEY);
+        RemovePreference(BUDGET_COMPLIANCE_DAYS_KEY);
+        RemovePreference(FINANCIAL_LESSONS_KEY);
+        RemovePreference(SAVINGS_GOALS_SET_KEY);
+        RemovePreference(SAVINGS_GOALS_ACHIEVED_KEY);
+        RemovePreference(CHAT_INTERACTIONS_KEY);
+        RemovePreference(WEEKLY_REVIEWS_KEY);
+        RemovePreference(LAST_CELEBRATION_KEY);
     }
     
     private async Task SaveProfileAsync(GamificationProfile profile)
     {
         await Task.CompletedTask;
         
-        Preferences.Set(TOTAL_POINTS_KEY, profile.TotalPoints);
-        Preferences.Set(CURRENT_STREAK_KEY, profile.CurrentStreak);
-        Preferences.Set(LAST_ACTIVE_DATE_KEY, profile.LastActiveDate.ToString("O"));
-        Preferences.Set(LAST_EXPENSE_DATE_KEY, profile.LastExpenseDate.ToString("O"));
-        Preferences.Set(TOTAL_EXPENSES_KEY, profile.TotalExpensesLogged);
-        Preferences.Set(BUDGET_COMPLIANCE_DAYS_KEY, profile.DaysWithBudgetCompliance);
-        Preferences.Set(FINANCIAL_LESSONS_KEY, profile.FinancialLessonsRead);
-        Preferences.Set(SAVINGS_GOALS_SET_KEY, profile.SavingsGoalsSet);
-        Preferences.Set(SAVINGS_GOALS_ACHIEVED_KEY, profile.SavingsGoalsAchieved);
-        Preferences.Set(CHAT_INTERACTIONS_KEY, profile.ChatInteractions);
-        Preferences.Set(WEEKLY_REVIEWS_KEY, profile.WeeklyReviewsCompleted);
-        Preferences.Set(LAST_CELEBRATION_KEY, profile.LastPlantCelebration.ToString("O"));
+        SetIntPreference(TOTAL_POINTS_KEY, profile.TotalPoints);
+        SetIntPreference(CURRENT_STREAK_KEY, profile.CurrentStreak);
+        SetStringPreference(LAST_ACTIVE_DATE_KEY, profile.LastActiveDate.ToString("O"));
+        SetStringPreference(LAST_EXPENSE_DATE_KEY, profile.LastExpenseDate.ToString("O"));
+        SetIntPreference(TOTAL_EXPENSES_KEY, profile.TotalExpensesLogged);
+        SetIntPreference(BUDGET_COMPLIANCE_DAYS_KEY, profile.DaysWithBudgetCompliance);
+        SetIntPreference(FINANCIAL_LESSONS_KEY, profile.FinancialLessonsRead);
+        SetIntPreference(SAVINGS_GOALS_SET_KEY, profile.SavingsGoalsSet);
+        SetIntPreference(SAVINGS_GOALS_ACHIEVED_KEY, profile.SavingsGoalsAchieved);
+        SetIntPreference(CHAT_INTERACTIONS_KEY, profile.ChatInteractions);
+        SetIntPreference(WEEKLY_REVIEWS_KEY, profile.WeeklyReviewsCompleted);
+        SetStringPreference(LAST_CELEBRATION_KEY, profile.LastPlantCelebration.ToString("O"));
     }
 }

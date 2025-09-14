@@ -10,16 +10,46 @@ public interface ITranslationService
     Task<(string language, float score)> DetectLanguageWithScoreAsync(string text); // new extended method
 }
 
-public class TranslationService : ITranslationService
+public class TranslationService : ITranslationService, IDisposable
 {
     private readonly HttpClient _httpClient;
-    
+    private readonly string _subscriptionKey;
+    private readonly string _endpoint;
+    private readonly string _region;
 
     public TranslationService()
     {
         _httpClient = new HttpClient();
-        _httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", _subscriptionKey);
-        _httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Region", _region);
+        
+        // Configure Azure Translator service settings
+        // TODO: Replace with configuration injection or environment variables in production
+        _subscriptionKey = GetTranslatorKey();
+        _endpoint = "https://api.cognitive.microsofttranslator.com/";
+        _region = "southafricanorth";
+        
+        if (!string.IsNullOrEmpty(_subscriptionKey))
+        {
+            _httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", _subscriptionKey);
+            _httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Region", _region);
+        }
+    }
+
+    private string GetTranslatorKey()
+    {
+        // In production, this should come from secure configuration
+        // For demo purposes, we'll use a placeholder that won't work
+        // This prevents accidental API usage with hardcoded keys
+        
+        // Check environment variable first (for production deployment)
+        var envKey = Environment.GetEnvironmentVariable("AZURE_TRANSLATOR_KEY");
+        if (!string.IsNullOrEmpty(envKey))
+        {
+            return envKey;
+        }
+        
+        // For demo/development - return empty to disable translation
+        // Developers should set their own key in environment variables
+        return string.Empty;
     }
 
     public async Task<string> TranslateTextAsync(string text, string fromLanguage, string toLanguage)
@@ -31,6 +61,13 @@ public class TranslationService : ITranslationService
             // If same language, no translation needed
             if (fromLanguage.Equals(toLanguage, StringComparison.OrdinalIgnoreCase))
                 return text;
+
+            // If no API key available, return original text
+            if (string.IsNullOrEmpty(_subscriptionKey))
+            {
+                System.Diagnostics.Debug.WriteLine("Translation service not configured - API key missing");
+                return text;
+            }
 
             string route = $"/translate?api-version=3.0&from={fromLanguage}&to={toLanguage}";
             string requestUri = _endpoint + route;
@@ -70,6 +107,13 @@ public class TranslationService : ITranslationService
         {
             if (string.IsNullOrWhiteSpace(text)) return ("en", 0f);
 
+            // If no API key available, default to English
+            if (string.IsNullOrEmpty(_subscriptionKey))
+            {
+                System.Diagnostics.Debug.WriteLine("Language detection service not configured - API key missing");
+                return ("en", 1.0f);
+            }
+
             string route = "/detect?api-version=3.0";
             string requestUri = _endpoint + route;
 
@@ -97,7 +141,11 @@ public class TranslationService : ITranslationService
         }
     }
 
-    public void Dispose() => _httpClient?.Dispose();
+    public void Dispose()
+    {
+        _httpClient?.Dispose();
+        GC.SuppressFinalize(this);
+    }
 }
 
 // DTOs for translation API responses
