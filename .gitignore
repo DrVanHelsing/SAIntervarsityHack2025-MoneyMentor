@@ -230,4 +230,30 @@ Artifacts/
 # except build/, which is used as an MSBuild target.
 !**/packages/build/
 
+###################
+## MAUI & .NET
+###################
+
+# Sensitive configuration files
 **/appsettings.Development.json
+
+###################
+## Documentation & Scripts
+###################
+
+# Ignore old documentation folders (but allow our new docs/ folder)
+TelkomSupportApp/README\ DOCS/
+
+# Ignore PowerShell scripts (keep essential ones)
+*.ps1
+!azure-deployment.ps1
+!Start-Services.ps1
+!test-android-connectivity.ps1
+
+# Ignore old markdown files except README and docs folder
+FinanceBuddy/*.md
+!FinanceBuddy/README.md
+
+# Generated configuration files
+appsettings.Production.Generated.json
+azure-resources.json

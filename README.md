@@ -1,301 +1,330 @@
-# MoneyMentor / FinanceBuddy Multi-App AI Platform
+﻿# 🌱 FinanceBuddy - AI-Powered Financial Wellness
 
-Comprehensive developer & operator guide for the MoneyMentor / FinanceBuddy repository.
+[![.NET MAUI](https://img.shields.io/badge/.NET%20MAUI-9.0-blue)](https://dotnet.microsoft.com/apps/maui)
+[![ASP.NET Core](https://img.shields.io/badge/ASP.NET%20Core-8.0-green)](https://dotnet.microsoft.com/apps/aspnet)
+[![Azure OpenAI](https://img.shields.io/badge/Azure%20OpenAI-GPT--4-orange)](https://azure.microsoft.com/products/cognitive-services/openai-service)
+[![Hackathon](https://img.shields.io/badge/SA%20Intervarsity%20Hack-2025-red)](https://github.com/DrVanHelsing/SAIntervarsityHack2025-MoneyMentor)
 
-This repository contains a .NET MAUI client (FinanceBuddy), an ASP.NET Core API orchestrator (MoneyMentor.ApiOrchestrator), and a shared DTO/domain library (MoneyMentor.Shared). The project demonstrates an LLM-backed personal finance assistant with expense tracking, two-way translation and automatic language detection.
+**Your AI-powered companion for financial wellness that grows with your money-wise journey! 🌸**
 
-This README is intentionally detailed and organized so new contributors and operators can get productive quickly.
+FinanceBuddy combines intelligent expense tracking, personalized AI financial advice, and engaging plant gamification to help you develop healthy financial habits that last a lifetime.
 
----
-CONTENTS
-- Project overview
-- High-level architecture
-- What changed (recent refactor summary)
-- Detailed component map (client, server, shared)
-- Models & DTOs (concrete shapes and examples)
-- Developer quick start (local dev, emulator tips)
-- Configuration & secrets
-- Running, debugging & common gotchas
-- Translation & detection flow (how it works)
-- Advice service & prompt engineering notes
-- Extending & re-enabling removed speech as an opt-in feature
-- Tests, CI and release guidance
-- Troubleshooting and logs
-- Contribution guidelines
-- Changelog (summary of current branch changes)
-- License
+## 📱 What Makes FinanceBuddy Special?
 
----
-PROJECT OVERVIEW
+### 🤖 **AI Money Mentor**
+- **Personalized Financial Advice** powered by Azure OpenAI
+- **Natural Language Chat** for all your money questions
+- **Voice Input Support** for hands-free interaction
+- **Multi-language Support** with Azure Translator
 
-- FinanceBuddy (Client): .NET MAUI app (targeting .NET 9). Primary responsibilities: show expense list, collect new expenses, and provide a chat UI that sends questions to the Advice API and displays replies.
+### 🌱 **Plant Gamification System**
+Your financial wellness journey is represented by a beautiful plant that grows through 6 stages:
+- 🌰 **Seed** (0-99 pts) - Starting your financial journey
+- 🌱 **Sprout** (100-299 pts) - Money aware and learning  
+- 🌿 **Seedling** (300-599 pts) - Building good habits
+- 🪴 **Young Plant** (600-999 pts) - Developing financial discipline
+- 🌳 **Mature Plant** (1000-1499 pts) - Money-wise mastery
+- 🌸 **Blooming Tree** (1500+ pts) - Financially flourishing!
 
-- MoneyMentor.ApiOrchestrator (Backend): ASP.NET Core (targeting .NET 8). Responsibility: receive advice requests, build contextual prompts (optionally summarizing recent expenses), call Azure OpenAI (via Azure.AI.OpenAI client), and return structured responses. Also provides expense CRUD endpoints.
+### 💸 **Smart Expense Tracking**
+- **Voice-to-Text** expense entry
+- **Automatic Categorization** with visual analytics
+- **Real-time Gamification** points and feedback
+- **Cross-platform Sync** between devices
 
-- MoneyMentor.Shared: DTOs and domain models shared between client and server.
+### 🎯 **Comprehensive Point System**
+Earn points for diverse financial wellness activities:
+- Daily expense logging and streak bonuses
+- Setting and achieving savings goals
+- Learning through AI mentor interactions
+- Completing weekly financial reviews
+- Budget creation and compliance
 
-High-level goals:
-- Deliver a friendly, contextual, South African-focused personal finance assistant.
-- Keep the client simple (typed chat) while providing accurate translated and localized responses.
-- Provide deterministic fallbacks when AI is unavailable.
+## 🚀 Quick Start
 
----
-WHAT CHANGED (RECENT REFRACTOR SUMMARY)
+### For Users
+1. **Download**: Get FinanceBuddy from your app store (when released)
+2. **Setup**: Grant microphone permissions for voice features
+3. **Start Growing**: Log your first expense and watch your plant begin to grow!
+4. **Learn**: Ask the AI Money Mentor questions about budgeting and savings
+5. **Achieve**: Set goals and watch your financial wellness flourish
 
-1. Removed on-device speech recording / SpeechService. Rationale: reduces platform complexity, permissions, and maintenance surface while focusing on translation and AI experience.
-2. Added automatic language detection and improved translation pipeline:
-   - DetectLanguageWithScoreAsync on the TranslationService returns detected language and confidence
-   - Chat UI includes an 'Auto' toggle to detect language and optionally update the UI language picker
-3. Replacement of Application.MainPage assignment with CreateWindow override in `App.xaml.cs` to comply with latest MAUI patterns.
-4. Added ServiceHelper static to expose built IServiceProvider to support parameterless XAML page constructors used by Shell DataTemplates.
-5. ChatPage updated to translate user text to English before sending to backend and translate responses back to user language.
+### For Developers
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/DrVanHelsing/SAIntervarsityHack2025-MoneyMentor.git
+   cd SAIntervarsityHack2025-MoneyMentor
+   ```
 
-Why this matters: simplified client, consistent translation flow, and better startup/DI compatibility for XAML-created pages.
+2. **Follow the setup guide**
+   ```bash
+   # See detailed instructions
+   docs/SETUP.md
+   ```
 
----
-DETAILED COMPONENT MAP
+3. **Run the application**
+   ```bash
+   # Start API server
+   cd MoneyMentor.ApiOrchestrator
+   dotnet run
+   
+   # Start MAUI app (separate terminal)
+   cd FinanceBuddy
+   dotnet build -t:Run -f net9.0-android
+   ```
 
-Client (FinanceBuddy):
-- App.xaml / App.xaml.cs
-  - App.xaml registers resources.
-  - App.xaml.cs overrides CreateWindow(Window) to return the AppShell Window.
+## 📚 Comprehensive Documentation
 
-- MauiProgram.cs
-  - Registers DI services, including ApiClient (HttpClient factory) and TranslationService.
-  - Registers pages for DI: AppShell (singleton), ExpensesPage, ChatPage (transient).
-  - Calls ServiceHelper.Initialize(app.Services) so parameterless ctor resolutions work in XAML scenarios.
+We've created detailed documentation for all aspects of the project:
 
-- ServiceHelper.cs
-  - Lightweight static wrapper around IServiceProvider used only for resolving services in parameterless constructors for XAML DataTemplates.
+| Document | Description |
+|----------|-------------|
+| [📖 **USAGE.md**](docs/USAGE.md) | Complete user guide with features and tips |
+| [⚙️ **SETUP.md**](docs/SETUP.md) | Detailed installation and configuration guide |
+| [👥 **TEAM.md**](docs/TEAM.md) | Team member information and contact details |
+| [🙏 **ACKNOWLEDGEMENTS.md**](docs/ACKNOWLEDGEMENTS.md) | Third-party libraries and attributions |
+| [☁️ **Azure Infrastructure**](scripts/README-main-bicep.md) | Azure deployment guide with Bicep |
 
-- Pages/
-  - ChatPage.xaml / ChatPage.xaml.cs
-    - Chat UI with language picker, Auto toggle, detected language label, and simple chat bubbles.
-    - Uses TranslationService to detect language (with score) and to translate text as necessary.
-    - Uses ApiClient to call POST /api/chat/message.
+## 🏗️ Architecture
 
-  - ExpensesPage.xaml / ExpensesPage.xaml.cs
-    - Expense list, add panel and runtime sample seeding (idempotent).
-    - Seeds sample expenses on first load (configurable behavior in code).
+### Technology Stack
+- **Frontend**: .NET MAUI 9.0 (Cross-platform: Android, iOS, Windows, macOS)
+- **Backend**: ASP.NET Core 8.0 Web API
+- **Database**: Entity Framework Core with SQL Server
+- **AI Services**: Azure OpenAI (GPT-4), Azure Speech, Azure Translator
+- **Cloud**: Microsoft Azure infrastructure
 
-- Services/
-  - ApiClient.cs: typed HttpClient wrapper for calls to the orchestrator (get/add expenses, ask advice).
-  - TranslationService.cs: wrapper around Azure Cognitive Services Translator endpoints.
-    - TranslateTextAsync(text, from, to)
-    - DetectLanguageWithScoreAsync(text) -> (language, score)
-
-Shared (MoneyMentor.Shared):
-- DTOs and models (ExpenseEntryDto, AdviceRequestDto, AdviceResponseDto, Expense model, etc.). These are the ground truth for client-server contracts.
-
-Backend (MoneyMentor.ApiOrchestrator):
-- Program.cs: configures EF Core (SQL or InMemory fallback), migrations and seeding.
-- Services/AdviceService.cs
-  - Builds expense context summary, composes system prompt, and calls Azure OpenAI ChatClient.
-  - Returns AdviceResponseDto and handles fallbacks.
-- Controllers/ChatController.cs: exposes POST /api/chat/message that accepts AdviceRequestDto.
-- Controllers/ExpensesController.cs: CRUD endpoints for expenses.
-- Data/AppDbContext.cs: models, precision for decimal Amount and seeds.
-
----
-MODELS & DTOs (concrete shapes)
-
-Key DTOs (examples; definitive shapes live in MoneyMentor.Shared):
-
-AdviceRequestDto
-- Guid UserId
-- string Question
-- string Language (two-letter translate code, e.g. "en", "zu")
-- List<ExpenseEntryDto>? Expenses
-
-AdviceResponseDto
-- string Answer
-- string Language
-
-ExpenseEntryDto
-- Guid ExpenseId
-- Guid UserId
-- int CategoryId
-- decimal Amount
-- string Currency
-- string Note
-- DateTime ExpenseDate
-
-Example AdviceRequest JSON
-
-```json
-{
-  "userId": "00000000-0000-0000-0000-000000000001",
-  "question": "Hoe bespaar ek op my maandlike begroting?",
-  "language": "af",
-  "expenses": [ /* optional expense entries */ ]
-}
+### Project Structure
+```
+├── FinanceBuddy/                 # .NET MAUI Cross-platform App
+│   ├── Components/               # Reusable UI components (PlantStatusView)
+│   ├── Pages/                    # App pages (Chat, Expenses, Plant Care)
+│   ├── Services/                 # Business logic and API integration
+│   └── Resources/                # Images, fonts, styles
+├── MoneyMentor.ApiOrchestrator/  # ASP.NET Core Web API
+│   ├── Controllers/              # API endpoints
+│   ├── Services/                 # Business services (AI, Translation)
+│   └── Data/                     # Entity Framework DbContext
+├── MoneyMentor.Shared/           # Shared models and DTOs
+├── docs/                         # Comprehensive documentation
+└── scripts/                      # Azure infrastructure (Bicep)
 ```
 
+## 🎓 Hackathon Context
+
+**Competition**: SA Intervarsity Hack 2025 - MoneyMentor Challenge  
+**University**: University of the Western Cape  
+**Team**: Tredir Sewpaul & Mzameli Mashiyi  
+**Goal**: Create innovative AI-powered financial wellness solution
+
+### Key Innovations
+✨ **Holistic Financial Wellness**: Beyond expense tracking to complete financial education  
+✨ **AI-Powered Guidance**: Personalized advice using Azure OpenAI  
+✨ **Engaging Gamification**: Plant growth represents real financial progress  
+✨ **Cross-Platform Solution**: True write-once, run-everywhere with .NET MAUI  
+✨ **Accessibility**: Voice input and inclusive design principles  
+
+## 🌟 Features Showcase
+
+### 💬 AI Money Mentor Chat
+Ask questions like:
+- "How should I create my first budget?"
+- "What's the best way to start an emergency fund?"
+- "Help me reduce my grocery expenses"
+
+### 🎮 Interactive Plant Care
+- **Tap your plant** to see detailed growth statistics
+- **Track progress** with visual wellness scores
+- **Celebrate milestones** with level-up animations
+- **Test features** in the Plant Care exploration tab
+
+### 📊 Smart Analytics
+- **Expense categorization** with visual charts
+- **Spending pattern analysis** and insights
+- **Budget compliance tracking** with gamification
+- **Financial wellness scoring** across multiple dimensions
+
+## 🔧 Development & Testing
+
+### Core Features for Testing
+1. **Expense Logging**: Add expenses and earn points
+2. **AI Chat**: Ask Money Mentor financial questions
+3. **Plant Growth**: Watch your plant evolve through stages
+4. **Voice Input**: Use speech-to-text for expense entry
+5. **Goal Setting**: Create and achieve financial goals
+
+### Testing Environment
+Use the **Plant Care** tab for comprehensive feature testing:
+- Award points manually to test plant growth
+- Simulate different financial activities
+- Reset gamification profile for clean testing
+- Explore all point-earning mechanisms
+
+### Configuration Requirements
+- **Azure OpenAI**: API key and endpoint configuration
+- **Database**: SQL Server or in-memory for development
+- **Speech Services**: Optional for voice features
+- **Translation**: Multi-language support configuration
+
 ---
-DEVELOPER QUICK START (LOCAL)
 
-Prereqs:
-- .NET 8 SDK (for API)
-- .NET 9 SDK (for MAUI)
-- Visual Studio 2022/2023 with MAUI workload (or VS 2022/VS 2023 Preview with MAUI support)
-- Android emulator or device for mobile testing (or target Windows)
+## 🎯 Getting Started Guides
 
-Steps:
-1. Clone the repo: `git clone https://github.com/DrVanHelsing/MoneyMentor` (or your fork)
-2. Open solution in Visual Studio.
-3. Configure backend secrets (see next section).
-4. Start the API (MoneyMentor.ApiOrchestrator) first:
-   - `dotnet run --project MoneyMentor.ApiOrchestrator` or run from the IDE.
-   - Verify `Now listening on: https://localhost:7001` in logs.
-5. Start the MAUI client (FinanceBuddy) in your chosen emulator.
-   - If using Android emulator and hosting API locally, the client will attempt local URL `http://10.0.2.2:7000` by default (see ApiClient for base URL resolution logic).
+### For End Users
+👉 **[Complete Usage Guide](docs/USAGE.md)** - Learn how to use every feature
 
-Notes on debugging:
-- Clean bin/obj and uninstall the app from the emulator if you see stale FastDev deployment issues.
-- If client pages are created by Shell DataTemplates, XAML needs parameterless constructors (we use ServiceHelper to resolve DI there).
+### For Developers
+👉 **[Development Setup](docs/SETUP.md)** - Complete installation and configuration guide
+
+### For Deployment
+👉 **[Azure Infrastructure](scripts/README-main-bicep.md)** - Deploy to Azure cloud
 
 ---
-CONFIGURATION & SECRETS (ENV VARS & appsettings)
 
-Keys & settings are read from `MoneyMentor.ApiOrchestrator/appsettings.json` (and environment-specific files) or environment variables.
+## 🤝 Contributing
 
-Important values:
-- `AzureOpenAI:Endpoint` - e.g. `https://<your-resource>.openai.azure.com/`
-- `AzureOpenAI:DeploymentName` - model/deployment id (e.g. `gpt-4o-mini`)
-- `AzureOpenAI:ApiKey` - API key for Azure OpenAI
-- `ConnectionStrings:DefaultConnection` - SQL Server connection (optional; InMemory fallback used when absent)
+We welcome contributions to FinanceBuddy! Here's how to get started:
 
-Recommended practices:
-- Use `dotnet user-secrets` locally or environment variables for keys.
-- For production, use Azure App Configuration, Key Vault, or environment variables in the hosting environment.
+1. **Fork** the repository
+2. **Create** a feature branch (`feature/amazing-feature`)
+3. **Follow** our development guidelines in [SETUP.md](docs/SETUP.md)
+4. **Test** your changes thoroughly
+5. **Submit** a pull request with clear description
 
-Example `appsettings.Development.json` snippet:
+### Development Guidelines
+- Use **.NET coding conventions**
+- **Test** on multiple platforms when possible
+- **Document** new features and changes
+- **Follow** the existing architecture patterns
+
+## 📞 Support & Contact
+
+### Team Members
+- **Tredir Sewpaul** - Team Lead & Full-Stack Developer
+  - 📧 5100592@mypillar7uwc.ac.za
+  - 📱 067 408 2819
+  - 💬 Discord: tredirs
+
+- **Mzameli Mashiyi** - Full-Stack Developer, Aspiring Machine Learning Engineer & Co-Lead
+  - 📱 079 825 0366
+  - 💬 Discord: mayarha_27989
+
+### Getting Help
+- 🐛 **Bug Reports**: [Create an issue](https://github.com/DrVanHelsing/SAIntervarsityHack2025-MoneyMentor/issues)
+- 💡 **Feature Requests**: [Suggest improvements](https://github.com/DrVanHelsing/SAIntervarsityHack2025-MoneyMentor/discussions)
+- 📖 **Documentation**: Check our [comprehensive docs](docs/)
+
+## 🏆 Achievements
+
+### Technical Accomplishments
+- ✅ **Complete Cross-Platform App** with .NET MAUI 9.0
+- ✅ **AI Integration** with Azure OpenAI and Speech Services
+- ✅ **Comprehensive Gamification** system with 6 plant growth stages
+- ✅ **Real-time Chat** with personalized financial advice
+- ✅ **Cloud-Ready Infrastructure** with Azure Bicep templates
+- ✅ **Accessibility Features** including voice input support
+
+### Hackathon Goals Achieved
+- ✅ **Innovation**: Unique plant-based gamification approach
+- ✅ **AI Integration**: Seamless Azure OpenAI financial mentoring
+- ✅ **User Experience**: Engaging and educational financial wellness
+- ✅ **Technical Excellence**: Production-ready architecture and deployment
+- ✅ **Accessibility**: Inclusive design with voice and visual features
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 🙏 Acknowledgments
+
+Special thanks to:
+- **SA Intervarsity Hack 2025 Organizers** for this incredible opportunity
+- **University of the Western Cape** for academic support
+- **Microsoft Azure** for providing accessible AI services
+- **.NET MAUI Community** for extensive documentation and support
+- **Open Source Contributors** whose libraries made this project possible
+
+---
+
+<div align="center">
+
+**🌱 Grow Your Financial Wellness with FinanceBuddy! 🌸**
+
+*From financial awareness to money-wise mastery - let your plant represent your journey to financial flourishing!*
+
+---
+
+**Made with 💚 by University of the Western Cape students for SA Intervarsity Hack 2025**
+
+[⭐ Star this repo](https://github.com/DrVanHelsing/SAIntervarsityHack2025-MoneyMentor) | [📖 Read the docs](docs/) | [🚀 Get started](docs/SETUP.md)
+
+</div>
+
+---
+
+## 🔧 Technical Details & Development Notes
+
+### Azure OpenAI Configuration
 ```json
 {
   "AzureOpenAI": {
-    "Endpoint": "https://<your-resource>.openai.azure.com/",
-    "DeploymentName": "gpt-4o-mini",
-    "ApiKey": "<YOUR_KEY>"
+    "Endpoint": "https://your-resource.openai.azure.com/",
+    "ApiKey": "your-api-key",
+    "DeploymentName": "gpt-4o"
   }
 }
 ```
 
----
-TRANSLATION & AUTO-DETECTION FLOW (DETAILED)
+### Speech Features (Optional)
+Speech recognition for expense entry can be enabled/disabled based on:
+```csharp
+if (config.GetValue<bool>("Features:EnableDeviceSpeech"))
+    builder.Services.AddSingleton<ISpeechService, PlatformSpeechService>();
+else
+    builder.Services.AddSingleton<ISpeechService, NoOpSpeechService>();
+```
 
-1. The chat UI contains a language Picker and an Auto switch.
-2. When Auto is ON and the user sends a message:
-   a. The client calls `TranslationService.DetectLanguageWithScoreAsync(userText)`.
-   b. Service returns language code (e.g. `zu`) and confidence score (0..1).
-   c. If confidence >= threshold (default in current code: 0.5) the client updates the language picker and records `currentLanguage`.
-3. Before sending to API, if detected language != `en`, the client translates the user text to English: `TranslateTextAsync(text, detected, "en")`.
-4. The client sends AdviceRequestDto with `Language` set to the user's two-letter translate code (the LLM is instructed via system message to reply in that language).
-5. Backend calls Azure OpenAI and returns `Answer` in English (if the model responds in English) or in the requested language. The client will perform a return translation to the user's language if necessary.
+### Database Configuration
+- **Development**: In-memory Entity Framework for quick testing
+- **Production**: SQL Server with Entity Framework Core migrations
+- **Connection**: Configured through appsettings.json or environment variables
 
-Edge cases handled:
-- If detection score is low, the client will not forcibly change the selected language but will still show a detection attempt and score.
-- If translation calls fail, the original text is used as a fallback to maintain UX.
+### Cross-Platform Support
+- **Android**: API level 21+ (Android 5.0+)
+- **iOS**: Version 15.0+
+- **Windows**: Windows 10 version 1903+
+- **macOS**: macOS 12.0+ (via Mac Catalyst)
 
----
-ADVICE SERVICE & PROMPT NOTES
+### Testing & CI Recommendations
+- **Unit Tests**: AdviceService prompt building and fallback behavior
+- **Integration Tests**: ExpensesController with in-memory provider
+- **Mock Services**: TranslationService with HttpMessageHandler mocking
+- **Platform Testing**: Cross-platform deployment validation
 
-- AdviceService constructs a system-level prompt that enforces form, tone, and localization. It also builds a small expense summary if expense context is provided.
-- Temperature is tuned low (0.3) for consistency.
-- Max tokens currently set to ~700 to avoid runaway responses.
-- Deterministic fallback messages exist per language to present the user with core principles when the AI service is not configured or fails.
+### Troubleshooting Common Issues
+- **"Azure OpenAI not configured"**: Check environment variables and appsettings
+- **Speech recognition not working**: Verify microphone permissions and feature flags
+- **Plant not updating**: Use refresh functionality in Plant Care tab
+- **API connection issues**: Ensure API server is running and accessible
 
-System prompt guidance highlights:
-- South African financial context (TFSA, RA, SARS, UIF, JSE, etc.)
-- Structured response sections (Summary, Key Considerations, Steps, Example, Risks, Disclaimer)
-- Always include an educational disclaimer that the assistant is not a tax or licensed financial advisor
-- Respectful handling of culturally sensitive topics such as "Black Tax"
-- Avoid special invalid characters in responses; friendly conversational tone
+### Extension Points for Future Development
+- **Multi-user Authentication**: Add user-specific data isolation
+- **Conversation Persistence**: Multi-turn context for AI conversations
+- **Offline Capability**: SQLite caching with sync functionality
+- **Social Features**: Share achievements and plant gardens
+- **Advanced Analytics**: Detailed financial wellness insights
 
-Security note: Avoid logging or persistently storing raw prompts that contain PII.
-
----
-RE-ENABLING DEVICE SPEECH (OPTIONAL)
-
-If you want to reintroduce on-device speech later, consider implementing as an opt-in feature behind a feature flag and DI registration. Suggested approach:
-
-1. Create an ISpeechService interface and a platform-specific implementation (Android/iOS) using the native speech SDK or a cross-platform wrapper.
-2. Register speech implementation in MauiProgram conditionally:
-   ```csharp
-   if (config.GetValue<bool>("Features:EnableDeviceSpeech"))
-       builder.Services.AddSingleton<ISpeechService, PlatformSpeechService>();
-   else
-       builder.Services.AddSingleton<ISpeechService, NoOpSpeechService>();
-   ```
-3. Guard UI: only show mic button when `ISpeechService` is present and the feature flag is enabled.
-4. Ensure microphone runtime permission logic is in place before starting recognition.
-
-This keeps speech optional and avoids shipping audio permissions by default.
-
----
-TESTING, CI & RELEASE
-
-Testing recommendations:
-- Unit tests for AdviceService prompt builder and fallback behavior.
-- Tests for TranslationService request/response mapping (mock HttpClient using HttpMessageHandler).
-- Integration test for ExpensesController using InMemory provider.
-
-CI Suggestions (GitHub Actions):
-- Build matrix for net8.0 (API) and net9.0 (MAUI) as applicable. Note: MAUI app builds generally require macOS for iOS targets.
-- Run unit tests, run static analysis and create artifacts for API image.
-
-Release notes:
-- API can be containerized (Linux container on Azure App Service or Azure Container Instances). Set secrets as environment variables during deployment.
-
----
-TROUBLESHOOTING & COMMON LOG MESSAGES
-
-- "Azure OpenAI not configured" � check env vars or appsettings for `AzureOpenAI:Endpoint` and `AzureOpenAI:ApiKey`.
-- "Failed to initialize Azure OpenAI chat client" � inspect logs for thrown exceptions during AdviceService ctor; ensure network access and correct endpoint format.
-- Stalled splash or app exit on device � clean `bin/obj`, uninstall app from device/emulator, rebuild and redeploy.
-- FastDeploy / Hot Reload stale assembly issues � fully stop debugging, uninstall the app from device, and rebuild.
-- Language detection not updating picker � ensure Auto is toggled on and the message text is long enough to detect; detection uses Azure Translator `/detect` endpoint and can return low confidence for very short phrases.
-
-Logs to review:
-- MAUI app console output (device logs)
-- API logs (AdviceService initialization, request timing)
-- Translation API request/response logs (TranslationService writes debug info on exceptions only)
-
----
-EXTENSION POINTS (WHERE TO ADD NEW FEATURES)
-- Add per-user authentication and separate DB tenancy (AppDbContext -> scoped context with user ID lookup).
-- Add conversation persistence to provide multi-turn context to AdviceService.
-- Add SignalR streaming for partial/streamed responses.
-- Add offline caching (SQLite) and sync logic for expense collection when offline.
-
----
-CONTRIBUTION GUIDELINES
-- Fork -> feature branch naming: `feature/<short-desc>` or `fix/<short-desc>`
-- Keep commits small and focused with clear messages (use the commit message template included in repo).
-- Open PR: include testing steps, what to validate in both API and client.
-- Maintain code style: C# 10/11 conventions in server (net8) and C# 13 on MAUI where used.
-
----
-CHANGELOG / CURRENT BRANCH NOTES
-- Removed SpeechService + mic UI and related platform DI.
-- Added auto-detect language feature in ChatPage with confidence-based picker sync.
-- TranslationService extended to return detection confidence.
-- Added ServiceHelper and parameterless ctors to support Shell DataTemplate instantiation with DI.
-- Replaced Application.MainPage setter with CreateWindow override to address MAUI obsolescence warnings.
-- Updated AdviceService prompt to enforce style and fallbacks.
-
----
-LICENSE
-MIT (see root LICENSE file if present).
-
----
-CONTACT / HELP
-- For repo questions, open an issue. Tag with `area:client` or `area:server` as appropriate.
-- For quick troubleshooting, include:
-  - Platform (Windows / macOS), SDK versions (`dotnet --info`)
-  - Steps to reproduce
-  - Relevant logs (attach device logcat output for Android issues)
+### Performance Optimization
+- **Hot Reload**: Enabled for MAUI development
+- **Lazy Loading**: Component initialization and data loading
+- **Caching**: Local storage for gamification data
+- **Efficient Queries**: Entity Framework query optimization
 
 ---
 
-Thank you � this README is intended as a living document. Please request updates if you want more detail in any section.
+*This README serves as the central hub for FinanceBuddy documentation. For detailed information on any topic, please refer to the comprehensive guides in the [docs](docs/) folder.*
 
